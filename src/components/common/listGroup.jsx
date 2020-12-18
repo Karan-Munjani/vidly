@@ -1,21 +1,15 @@
 import React, { Component } from "react";
 class ListGroup extends Component {
   state = {};
+
   render() {
+    const { items } = this.props;
     return (
-      /*eslint-disable */
-      <div class="list-group d-flex align-items-center">
-        <a href="#" class="list-group-item list-group-item-action active">
-          Active item
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          Item
-        </a>
-        <a href="#" class="list-group-item list-group-item-action ">
-          Disabled item
-        </a>
-      </div>
-      /*eslint-enable */
+      <ul className="list-group">
+        {items.map((item) => {
+          return <li className="list-group-item">{item.name}</li>;
+        })}
+      </ul>
     );
   }
 }

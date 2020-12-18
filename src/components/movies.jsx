@@ -4,14 +4,22 @@ import Pagination from "./common/pagination";
 import Like from "./common/like";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
+import { getGenres } from "../services/fakeGenreService";
 
 class MoviesTable extends Component {
   state = {
-    movies: getMovies(),
+    movies: [],
     genres: [],
     pageSize: 4, //No of items to show on a page
     currentPage: 1,
   };
+
+  componentDidMount() {
+    this.setState({
+      movies: getMovies(),
+      genres: getGenres(),
+    });
+  }
 
   render() {
     const { length: moviesCount } = this.state.movies;
@@ -24,8 +32,11 @@ class MoviesTable extends Component {
     // <> -> ReactFragment
     return (
       <div className="row">
-        <div className="col-2 d-flex align-items-center">
-          <ListGroup items={this.state.genres} />
+        <div className="col-3 d-flex align-items-center">
+          <ListGroup
+            items={this.state.genres}
+            onItemSelect={this.handleGenereSelect}
+          />
         </div>
         <div className="col">
           <h5 className="mt-3 mb-3">
@@ -96,6 +107,10 @@ class MoviesTable extends Component {
 
   handlePageChnage = (page) => {
     this.setState({ currentPage: page });
+  };
+
+  handleGenreSelect = (genre) => {
+    console.log(genre);
   };
 }
 
