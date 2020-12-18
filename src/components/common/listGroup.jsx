@@ -18,4 +18,8 @@ class ListGroup extends Component {
   }
 }
 
+ListGroup.defaultProps = {
+  textProperty: "name",
+  valueProperty: "_id",
+};
 export default ListGroup;

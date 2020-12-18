@@ -36,8 +36,6 @@ class MoviesTable extends Component {
           <ListGroup
             items={this.state.genres}
             onItemSelect={this.handleGenereSelect}
-            textProperty="name"
-            valueProperty="_id"
           />
         </div>
         <div className="col">
