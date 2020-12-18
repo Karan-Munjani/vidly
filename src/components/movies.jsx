@@ -25,23 +25,23 @@ class MoviesTable extends Component {
     const { length: moviesCount } = this.state.movies;
     const { pageSize, currentPage, movies: allMovies } = this.state;
     if (moviesCount === 0) {
-      return <h5 className="mt-3 mb-3">There Are No Movies In Database</h5>;
+      return <h5>There Are No Movies In Database</h5>;
     }
 
     const movies = paginate(allMovies, currentPage, pageSize);
     // <> -> ReactFragment
     return (
-      <div className="row">
-        <div className="col-3 d-flex align-items-center">
+      <div className="row mt-3 mb-3">
+        <div className="col-3">
           <ListGroup
             items={this.state.genres}
             onItemSelect={this.handleGenereSelect}
+            textProperty="name"
+            valueProperty="_id"
           />
         </div>
         <div className="col">
-          <h5 className="mt-3 mb-3">
-            Showing {moviesCount} Movies from Database
-          </h5>
+          <h5>Showing {moviesCount} Movies from Database</h5>
           <table className="table">
             <thead>
               <tr>

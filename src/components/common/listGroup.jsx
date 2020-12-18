@@ -3,11 +3,15 @@ class ListGroup extends Component {
   state = {};
 
   render() {
-    const { items } = this.props;
+    const { items, textProperty, valueProperty } = this.props;
     return (
       <ul className="list-group">
         {items.map((item) => {
-          return <li className="list-group-item">{item.name}</li>;
+          return (
+            <li key={item[valueProperty]} className="list-group-item">
+              {item[textProperty]}
+            </li>
+          );
         })}
       </ul>
     );
