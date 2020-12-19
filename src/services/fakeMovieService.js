@@ -66,6 +66,13 @@ const movies = [
     numberInStock: 7,
     dailyRentalRate: 3.5,
   },
+  {
+    _id: "5b21ca3eeb7f6fbccd471814",
+    title: "Phir Hera Pheri",
+    genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
+    numberInStock: 2,
+    dailyRentalRate: 3.5,
+  },
 ];
 
 export function getMovies() {
