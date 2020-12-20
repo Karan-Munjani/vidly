@@ -104,12 +104,14 @@ class Movies extends Component {
   };
 
   handleSort = (path) => {
-    const prevOrder = this.state.sortColumn.order;
-    if (prevOrder === "asc") {
-      this.setState({ sortColumn: { path, order: "desc" } });
+    const sortColumn = { ...this.state.sortColumn };
+    if (sortColumn.path === path) {
+      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
     } else {
-      this.setState({ sortColumn: { path, order: "asc" } });
+      sortColumn.path = path;
+      sortColumn.order = "asc";
     }
+    this.setState({ sortColumn });
   };
 }
 
