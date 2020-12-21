@@ -20,8 +20,6 @@ class TableHeader extends Component {
     return (
       <thead>
         <tr>
-          {console.log(this.props.columns)}
-
           {this.props.columns.map((column) => (
             <th
               key={column.path || column.key}
