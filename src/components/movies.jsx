@@ -61,7 +61,7 @@ class Movies extends Component {
           <h5>Showing {filtered.length} Movies from Database</h5>
           <MoviesTable
             movies={movies}
-            sortColumn={sortColumn}
+            sortColumn={sortColumn} //default column which is sorted
             onLike={this.handleLike}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
