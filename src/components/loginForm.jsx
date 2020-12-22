@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 class LoginForm extends Component {
+  handleSubmit = (e) => {
+    e.preventDefault();
+    // call to server and submit data if logged in then redirect movies page
+
+    console.log("submitted");
+  };
   render() {
     return (
       <div>
         <h1>LogIn</h1>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label htmlFor="e-mail">Email</label>
             <input
