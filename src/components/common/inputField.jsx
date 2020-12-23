@@ -1,6 +1,6 @@
 import React from "react";
 const InputField = (props) => {
-  const { name, type, label, value, onChange, autoFocus } = props;
+  const { name, type, label, value, onChange, autoFocus, error } = props;
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
@@ -13,6 +13,8 @@ const InputField = (props) => {
         autoFocus={autoFocus}
         className="form-control"
       />
+
+      {error && <div className="alert alert-danger">{error}</div>}
     </div>
   );
 };
