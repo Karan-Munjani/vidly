@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import InputField from "./common/inputField";
+const Joi = require("joi");
+
 class LoginForm extends Component {
   state = {
     account: {
@@ -11,17 +13,42 @@ class LoginForm extends Component {
   username = React.createRef();
   //   Avoid using ref  for form data, but if you need to work with dom for use of animation library,3rd party dom libs then use it
 
+  schema = new Joi.object({
+    username: Joi.string().min(5).required(),
+    password: Joi.string().min(8).required(),
+  });
+
   validate = () => {
+    const { error, value } = this.schema.validate(
+      {
+        username: this.state.account.username,
+        password: this.state.account.password,
+      },
+      { abortEarly: false }
+    );
+
+    if (!error) return null;
     const errors = {};
-    const { account } = this.state;
-    if (account.username.trim() === "") {
-      errors.username = "UserName is required";
-    }
-    if (account.password.trim() === "") {
-      errors.password = "Password is required";
+    error.details.map((err) => {
+      return (errors[err.path[0]] = err.message);
+    });
+    console.log(error.details);
+
+    return errors;
+  };
+
+  validateProperty = (input) => {
+    if (input.name === "username") {
+      if (input.value.trim() === "") {
+        return "username is required";
+      }
     }
 
-    return Object.keys(errors).length === 0 ? null : errors;
+    if (input.name === "password") {
+      if (input.value.trim() === "") {
+        return "password is required";
+      }
+    }
   };
 
   handleSubmit = (e) => {
@@ -42,12 +69,15 @@ class LoginForm extends Component {
     console.log("submitted");
   };
 
-  handleInput = (e) => {
-    // console.log(e.currentTarget.value);
+  handleInput = async (e) => {
+    const { currentTarget: input } = e;
     const account = { ...this.state.account };
-    // console.log(account);
-    account[e.currentTarget.name] = e.currentTarget.value;
+    account[input.name] = input.value;
     this.setState({ account });
+
+    const errors = await this.validate();
+    this.setState({ errors: errors || {} });
+    // console.log(account);
   };
   render() {
     const { account, errors } = this.state;
