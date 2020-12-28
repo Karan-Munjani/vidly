@@ -19,7 +19,7 @@ class LoginForm extends Component {
   });
 
   validate = () => {
-    const { error, value } = this.schema.validate(
+    const { error } = this.schema.validate(
       {
         username: this.state.account.username,
         password: this.state.account.password,

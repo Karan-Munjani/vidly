@@ -1,6 +1,6 @@
 import "./App.css";
 import MoviesTable from "./components/movies";
-import { Route, NavLink, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import NavBar from "./components/navbar";
 import Customers from "./components/customer";
 import Rentals from "./components/rentals";
