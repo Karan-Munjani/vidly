@@ -14,8 +14,8 @@ class LoginForm extends Component {
   //   Avoid using ref  for form data, but if you need to work with dom for use of animation library,3rd party dom libs then use it
 
   schema = new Joi.object({
-    username: Joi.string().min(5).required(),
-    password: Joi.string().min(8).required(),
+    username: Joi.string().min(5).required().label("Username"),
+    password: Joi.string().min(8).required().label("Password"),
   });
 
   validate = () => {
@@ -32,23 +32,21 @@ class LoginForm extends Component {
     error.details.map((err) => {
       return (errors[err.path[0]] = err.message);
     });
-    console.log(error.details);
+    console.log(error);
 
     return errors;
   };
 
-  validateProperty = (input) => {
-    if (input.name === "username") {
-      if (input.value.trim() === "") {
-        return "username is required";
-      }
-    }
+  validateProperty = ({ name, value }) => {
+    const obj = { [name]: value };
+    const schema = new Joi.object({
+      [name]: this.schema.extract(name),
+    });
+    const { error } = schema.validate(obj);
 
-    if (input.name === "password") {
-      if (input.value.trim() === "") {
-        return "password is required";
-      }
-    }
+    if (error) return error.details[0].message;
+    else return null;
+    // return result.error ? result.error.details[0].message : null;
   };
 
   handleSubmit = (e) => {
@@ -63,22 +61,25 @@ class LoginForm extends Component {
     }
 
     // call to server and submit data if logged in then redirect movies page
-    // const userName = this.username.current.value;
-    // console.log(userName);
 
     console.log("submitted");
   };
 
-  handleInput = async (e) => {
-    const { currentTarget: input } = e;
+  handleInputChange = ({ currentTarget: input }) => {
+    const errors = { ...this.state.errors };
+    const errorMessage = this.validateProperty(input);
+
+    if (errorMessage) errors[input.name] = errorMessage;
+    else delete errors[input.name];
+
+    // console.log(errors);
     const account = { ...this.state.account };
     account[input.name] = input.value;
-    this.setState({ account });
 
-    const errors = await this.validate();
-    this.setState({ errors: errors || {} });
+    this.setState({ account, errors: errors || {} });
     // console.log(account);
   };
+
   render() {
     const { account, errors } = this.state;
 
@@ -91,7 +92,7 @@ class LoginForm extends Component {
             type="text"
             label="Username"
             value={account.username}
-            onChange={this.handleInput}
+            onChange={this.handleInputChange}
             autoFocus={true}
             error={errors.username}
           ></InputField>
@@ -101,11 +102,13 @@ class LoginForm extends Component {
             type="password"
             label="Password"
             value={account.password}
-            onChange={this.handleInput}
+            onChange={this.handleInputChange}
             error={errors.password}
           ></InputField>
 
-          <button className="btn btn-primary">Submit</button>
+          <button disabled={this.validate()} className="btn btn-primary">
+            Submit
+          </button>
         </form>
       </div>
     );

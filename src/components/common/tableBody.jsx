@@ -21,7 +21,7 @@ class TableBody extends Component {
               item[title]
               item[numberInStock] etc....
               But
-              item[genre.name] can't be accessed by [] cause its a nested object
+              item[genre.name] can't be accessed by [] brackets cause its a nested object
               so use Loadash*/
 
               <td key={column.path || column.key}>
