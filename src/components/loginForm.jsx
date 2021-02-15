@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import Form from "./common/form";
 import InputField from "./common/inputField";
+
 const Joi = require("joi");
 
-class LoginForm extends Component {
+class LoginForm extends Form {
   state = {
-    account: {
+    data: {
       username: "",
       password: "",
     },
@@ -18,70 +20,16 @@ class LoginForm extends Component {
     password: Joi.string().min(8).required().label("Password"),
   });
 
-  validate = () => {
-    const { error } = this.schema.validate(
-      {
-        username: this.state.account.username,
-        password: this.state.account.password,
-      },
-      { abortEarly: false }
-    );
-
-    if (!error) return null;
-    const errors = {};
-    error.details.map((err) => {
-      return (errors[err.path[0]] = err.message);
-    });
-    console.log(error);
-
-    return errors;
-  };
-
-  validateProperty = ({ name, value }) => {
-    const obj = { [name]: value };
-    const schema = new Joi.object({
-      [name]: this.schema.extract(name),
-    });
-    const { error } = schema.validate(obj);
-
-    if (error) return error.details[0].message;
-    else return null;
-    // return result.error ? result.error.details[0].message : null;
-  };
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    const errors = this.validate();
-    // console.log(errors);
-    this.setState({ errors: errors || {} });
-
-    if (errors) {
-      return;
-    }
-
+ 
+  dosubmit = () => {
     // call to server and submit data if logged in then redirect movies page
 
     console.log("submitted");
   };
 
-  handleInputChange = ({ currentTarget: input }) => {
-    const errors = { ...this.state.errors };
-    const errorMessage = this.validateProperty(input);
-
-    if (errorMessage) errors[input.name] = errorMessage;
-    else delete errors[input.name];
-
-    // console.log(errors);
-    const account = { ...this.state.account };
-    account[input.name] = input.value;
-
-    this.setState({ account, errors: errors || {} });
-    // console.log(account);
-  };
-
+ 
   render() {
-    const { account, errors } = this.state;
+    const { data, errors } = this.state;
 
     return (
       <div>
@@ -91,7 +39,7 @@ class LoginForm extends Component {
             name="username"
             type="text"
             label="Username"
-            value={account.username}
+            value={data.username}
             onChange={this.handleInputChange}
             autoFocus={true}
             error={errors.username}
@@ -101,7 +49,7 @@ class LoginForm extends Component {
             name="password"
             type="password"
             label="Password"
-            value={account.password}
+            value={data.password}
             onChange={this.handleInputChange}
             error={errors.password}
           ></InputField>
