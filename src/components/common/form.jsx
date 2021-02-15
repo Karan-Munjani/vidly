@@ -1,3 +1,4 @@
+import InputField from "./inputField";
 import { Component } from "react";
 const Joi = require("joi");
 
@@ -65,6 +66,30 @@ class Form extends Component {
     this.setState({ data, errors: errors || {} });
     // console.log(data);
   };
+
+  renderButton(label) {
+    return (
+      <button disabled={this.validate()} className="btn btn-primary">
+        {label}
+      </button>
+    );
+  }
+
+  renderInputField(name, label, type = "text") {
+    const { data, errors } = this.state;
+
+    return (
+      <InputField
+        name={name}
+        type={type}
+        label={label}
+        value={data[name]}
+        onChange={this.handleInputChange}
+        autoFocus={true}
+        error={errors[name]}
+      ></InputField>
+    );
+  }
 }
 
 export default Form;
