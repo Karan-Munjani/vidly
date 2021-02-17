@@ -46,6 +46,12 @@ class Movies extends Component {
     return { totalCount: filtered.length, data: movies };
   };
 
+  handleAddMovie = () => {
+    // console.log("Add clicked");
+    // console.log(this.props);
+    this.props.history.push("/movies/new");
+  };
+
   render() {
     const { length: moviesCount } = this.state.movies;
     const { pageSize, currentPage, selectedGenre, sortColumn } = this.state;
@@ -67,21 +73,32 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
-          <h5>Showing {totalCount} Movies from Database</h5>
-          <MoviesTable
-            movies={movies}
-            sortColumn={sortColumn} //default column which is sorted
-            onLike={this.handleLike}
-            onDelete={this.handleDelete}
-            onSort={this.handleSort}
-          />
+          <div className="row">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.handleAddMovie}
+            >
+              Add Movie
+            </button>
+          </div>
+          <div className="row mt-3 mb-3">
+            <h5>Showing {totalCount} Movies from Database</h5>
+            <MoviesTable
+              movies={movies}
+              sortColumn={sortColumn} //default column which is sorted
+              onLike={this.handleLike}
+              onDelete={this.handleDelete}
+              onSort={this.handleSort}
+            />
 
-          <Pagination
-            itemsCount={totalCount}
-            pageSize={pageSize}
-            onPageChange={this.handlePageChnage}
-            currentPage={currentPage}
-          />
+            <Pagination
+              itemsCount={totalCount}
+              pageSize={pageSize}
+              onPageChange={this.handlePageChnage}
+              currentPage={currentPage}
+            />
+          </div>
         </div>
       </div>
     );

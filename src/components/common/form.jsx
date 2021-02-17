@@ -1,5 +1,6 @@
 import InputField from "./inputField";
 import { Component } from "react";
+import SelectField from "./selectField";
 const Joi = require("joi");
 
 class Form extends Component {
@@ -9,26 +10,23 @@ class Form extends Component {
   };
 
   validate = () => {
-    const { error } = this.schema.validate(
-      {
-        username: this.state.data.username,
-        password: this.state.data.password,
-      },
-      { abortEarly: false }
-    );
+    const { error } = this.schema.validate(this.state.data, {
+      abortEarly: false,
+    });
 
     if (!error) return null;
     const errors = {};
     error.details.map((err) => {
       return (errors[err.path[0]] = err.message);
     });
-    console.log(error);
+    // console.log(error);
 
     return errors;
   };
 
   validateProperty = ({ name, value }) => {
     const obj = { [name]: value };
+    
     const schema = new Joi.object({
       [name]: this.schema.extract(name),
     });
@@ -49,7 +47,7 @@ class Form extends Component {
     if (errors) {
       return;
     }
-    this.dosubmit();
+    this.doSubmit();
   };
 
   handleInputChange = ({ currentTarget: input }) => {
@@ -88,6 +86,22 @@ class Form extends Component {
         autoFocus={autoFocus}
         error={errors[name]}
       ></InputField>
+    );
+  }
+
+  renderSelectInput(name, label, options) {
+    // console.log(data.genres);
+    const { data, errors } = this.state;
+
+    return (
+      <SelectField
+        name={name}
+        label={label}
+        options={options}
+        value={data[name]}
+        onChange={this.handleInputChange}
+        error={errors[name]}
+      ></SelectField>
     );
   }
 }
