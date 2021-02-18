@@ -6,6 +6,7 @@ import ListGroup from "./common/listGroup";
 import { getGenres } from "../services/fakeGenreService";
 import MoviesTable from "./moviesTable";
 import _ from "lodash";
+import SearchField from "./common/searchField";
 
 class Movies extends Component {
   state = {
@@ -13,6 +14,8 @@ class Movies extends Component {
     genres: [],
     pageSize: 4, //No of items to show on a page
     currentPage: 1,
+    searchQuery: "",
+    selectedGenre: null,
     sortColumn: { path: "title", order: "asc" },
   };
 
@@ -32,18 +35,53 @@ class Movies extends Component {
       movies: allMovies,
       selectedGenre,
       sortColumn,
+      searchQuery,
     } = this.state;
 
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter((m) => {
-            return m.genre._id === selectedGenre._id;
-          })
-        : allMovies;
+    let filtered = allMovies;
+    if (searchQuery) {
+      filtered = allMovies.filter((m) =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    }
+
+    else if(selectedGenre && selectedGenre._id){
+      filtered = allMovies.filter(m=>m.genre._id===selectedGenre._id);
+    }
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const movies = paginate(sorted, currentPage, pageSize);
 
     return { totalCount: filtered.length, data: movies };
+  };
+  handleDelete = (movie) => {
+    const movies = this.state.movies.filter((m) => m._id !== movie._id);
+    this.setState({ movies });
+  };
+
+  handleLike = (movie) => {
+    // console.log("clicked", movie)
+    const movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index] = { ...movies[index] };
+    movies[index].liked = !movies[index].liked;
+
+    this.setState({ movies });
+  };
+
+  handlePageChnage = (page) => {
+    this.setState({ currentPage: page });
+  };
+
+  handleGenreSelect = (genre) => {
+    this.setState({
+      selectedGenre: genre,
+      currentPage: 1,
+      searchQuery: "",
+    });
+  };
+
+  handleSort = (sortColumn) => {
+    this.setState({ sortColumn });
   };
 
   handleAddMovie = () => {
@@ -52,9 +90,20 @@ class Movies extends Component {
     this.props.history.push("/movies/new");
   };
 
+  handleSearchType = (query) => {
+    console.log(" clicked");
+    this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
+  };
+
   render() {
     const { length: moviesCount } = this.state.movies;
-    const { pageSize, currentPage, selectedGenre, sortColumn } = this.state;
+    const {
+      pageSize,
+      currentPage,
+      selectedGenre,
+      sortColumn,
+      searchQuery,
+    } = this.state;
 
     const { totalCount, data: movies } = this.getPagedData();
 
@@ -82,6 +131,15 @@ class Movies extends Component {
               Add Movie
             </button>
           </div>
+
+          <div className="row mt-3">
+            <SearchField
+              value={searchQuery}
+              onChange={this.handleSearchType}
+              placeholder={"Search Movies...."}
+            ></SearchField>
+          </div>
+
           <div className="row mt-3 mb-3">
             <h5>Showing {totalCount} Movies from Database</h5>
             <MoviesTable
@@ -103,36 +161,6 @@ class Movies extends Component {
       </div>
     );
   }
-
-  handleDelete = (movie) => {
-    const movies = this.state.movies.filter((m) => m._id !== movie._id);
-    this.setState({ movies });
-  };
-
-  handleLike = (movie) => {
-    // console.log("clicked", movie)
-    const movies = [...this.state.movies];
-    const index = movies.indexOf(movie);
-    movies[index] = { ...movies[index] };
-    movies[index].liked = !movies[index].liked;
-
-    this.setState({ movies });
-  };
-
-  handlePageChnage = (page) => {
-    this.setState({ currentPage: page });
-  };
-
-  handleGenreSelect = (genre) => {
-    this.setState({
-      selectedGenre: genre,
-      currentPage: 1,
-    });
-  };
-
-  handleSort = (sortColumn) => {
-    this.setState({ sortColumn });
-  };
 }
 
 export default Movies;
