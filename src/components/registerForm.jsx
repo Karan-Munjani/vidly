@@ -1,5 +1,7 @@
 import React from "react";
+import { registerUser } from "../services/userService";
 import Form from "./common/form";
+
 const Joi = require("joi");
 class RegisterForm extends Form {
   state = {
@@ -19,10 +21,21 @@ class RegisterForm extends Form {
     name: Joi.string().min(3).required().label("Name"),
   });
 
-  doSubmit = () => {
+  doSubmit = async () => {
     // call to server and submit data if logged in then redirect movies page
-
-    console.log("submitted");
+    try {
+      const user = this.state.data;
+      await registerUser(user);
+      console.log("submitted");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        // toast.error("The User With Email-id Exists already");
+        // toast.error(ex.response.data);
+        const errors = { ...this.state.errors };
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {
