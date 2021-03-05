@@ -1,6 +1,6 @@
 import httpService from "./httpService";
-import config from "../config.json";
+import { apiURL } from "../config.json";
 
 export function registerUser(user) {
-    return httpService.post(config.apiEndPoint + "/users", user);
+  return httpService.post(apiURL + "/users", user);
 }
