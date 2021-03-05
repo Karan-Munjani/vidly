@@ -29,10 +29,15 @@ export function getCurrentUser() {
     return null;
   }
 }
+
+export function getJWT() {
+  return localStorage.getItem(tokenKey);
+}
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   login,
   logout,
   getCurrentUser,
   loginWithJwt,
+  getJWT
 };
