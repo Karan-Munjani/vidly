@@ -52,7 +52,10 @@ const NavBar = ({ user }) => {
           {user && (
             <>
               <li className="navbar-item">
-                <NavLink className="nav-link" to="/profile">
+                <NavLink
+                  className="nav-link"
+                  to={{ pathname: "/profile", user: user }}
+                >
                   {user.name}
                 </NavLink>
               </li>

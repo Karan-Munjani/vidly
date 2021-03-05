@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "./common/form";
-import { login } from "../services/authService";
+import auth from "../services/authService";
 
 const Joi = require("joi");
 
@@ -22,8 +22,7 @@ class LoginForm extends Form {
     // call to server and submit data if logged in then redirect movies page
     try {
       const { data } = this.state;
-      const { data: jwt } = await login(data.username, data.password);
-      localStorage.setItem("token", jwt);
+      await auth.login(data.username, data.password);
       console.log("submitted");
       window.location = "/";
     } catch (ex) {

@@ -1,4 +1,5 @@
 import React from "react";
+import auth from "../services/authService";
 import { registerUser } from "../services/userService";
 import Form from "./common/form";
 
@@ -26,7 +27,9 @@ class RegisterForm extends Form {
     try {
       const user = this.state.data;
       const response = await registerUser(user);
-      localStorage.setItem("token", response.headers["x-auth-token"]);
+      const jwt = response.headers["x-auth-token"];
+      auth.loginWithJwt(jwt);
+
       window.location = "/";
       console.log("submitted");
     } catch (ex) {
