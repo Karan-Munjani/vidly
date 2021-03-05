@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import MoviesTable from "./components/movies";
+import Movies from "./components/movies";
 import NavBar from "./components/navbar";
 import Customers from "./components/customer";
 import Rentals from "./components/rentals";
@@ -32,7 +32,12 @@ class App extends Component {
           <Switch>
             <Route path="/login" component={LoginForm}></Route>
             <Route path="/movies/:id" component={MovieForm}></Route>
-            <Route path="/movies" component={MoviesTable}></Route>
+            <Route
+              path="/movies"
+              render={(props) => (
+                <Movies {...props} user={this.state.user}></Movies>
+              )}
+            ></Route>
             <Route path="/customers" component={Customers}></Route>
             <Route path="/rentals" component={Rentals}></Route>
             <Route path="/not-found" component={NotFound}></Route>

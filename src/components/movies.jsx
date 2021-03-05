@@ -117,6 +117,8 @@ class Movies extends Component {
 
     const { totalCount, data: movies } = this.getPagedData();
 
+    const { user } = this.props;
+
     if (moviesCount === 0) {
       return <h5>There Are No Movies In Database</h5>;
     }
@@ -133,13 +135,15 @@ class Movies extends Component {
         </div>
         <div className="col">
           <div className="row">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.handleAddMovie}
-            >
-              Add Movie
-            </button>
+            {user && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={this.handleAddMovie}
+              >
+                Add Movie
+              </button>
+            )}
           </div>
 
           <div className="row mt-3">
