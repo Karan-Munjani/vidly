@@ -1,5 +1,6 @@
 import React from "react";
 import Form from "./common/form";
+import { login } from "../services/authService";
 
 const Joi = require("joi");
 
@@ -17,10 +18,21 @@ class LoginForm extends Form {
     password: Joi.string().min(8).required().label("Password"),
   });
 
-  doSubmit = () => {
+  doSubmit = async () => {
     // call to server and submit data if logged in then redirect movies page
-
-    console.log("submitted");
+    try {
+      const { data } = this.state;
+      const { data: jwt } = await login(data.username, data.password);
+      localStorage.setItem("token", jwt);
+      console.log("submitted");
+      this.props.history.push("/movies");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = this.state.errors;
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {

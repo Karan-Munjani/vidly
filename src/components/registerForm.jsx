@@ -25,7 +25,9 @@ class RegisterForm extends Form {
     // call to server and submit data if logged in then redirect movies page
     try {
       const user = this.state.data;
-      await registerUser(user);
+      const response = await registerUser(user);
+      localStorage.setItem("token", response.headers["x-auth-token"]);
+      this.props.history.push("/");
       console.log("submitted");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
