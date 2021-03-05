@@ -1,6 +1,7 @@
 import React from "react";
 import Form from "./common/form";
 import auth from "../services/authService";
+import { Redirect } from "react-router";
 
 const Joi = require("joi");
 
@@ -35,6 +36,7 @@ class LoginForm extends Form {
   };
 
   render() {
+    if (auth.getCurrentUser()) return <Redirect to="/"></Redirect>;
     return (
       <div>
         <h1>LogIn</h1>

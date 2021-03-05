@@ -9,7 +9,6 @@ class MoviesTable extends Component {
 
   componentDidMount() {
     const user = auth.getCurrentUser();
-    console.log(user);
     if (!user) {
       this.setState({ hidden: true });
     }

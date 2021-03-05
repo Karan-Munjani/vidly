@@ -4,10 +4,6 @@ class Profile extends Component {
     user: "",
   };
 
-  componentDidMount() {
-    const user = this.props.location.user;
-    this.setState({ user });
-  }
   render() {
     return <h1>Hello</h1>;
   }
